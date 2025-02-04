@@ -7,8 +7,8 @@ import {
   Param,
   Get,
 } from '@nestjs/common';
-import User from 'src/interfaces/User';
 import { UsersService } from './users.service';
+import { User } from 'src/schema/UserSchema';
 
 @Controller('users')
 export class UsersController {

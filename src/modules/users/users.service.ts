@@ -1,23 +1,42 @@
-import { Injectable } from '@nestjs/common';
-import User from 'src/interfaces/User';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { User } from 'src/schema/UserSchema';
 
 @Injectable()
 export class UsersService {
-  private usuarios: User[] = [];
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-  crearUsuario(usuario: User) {
+  async crearUsuario(usuario: User): Promise<User> {
+    const createdUsuario = new this.userModel(usuario);
+    return createdUsuario.save();
+  }
+
+  async obtenerUsuarios(id: string): Promise<User> {
+    const usuario = await this.userModel.findById(id).exec();
+    if (!usuario) {
+      throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
+    }
     return usuario;
   }
 
-  obtenerUsuarios(id: string) {
-    return id;
+  async actualizarUsuario(id: string, usuario: User): Promise<User> {
+    const updatedUsuario = await this.userModel
+      .findByIdAndUpdate(id, usuario, {
+        new: true,
+      })
+      .exec();
+    if (!updatedUsuario) {
+      throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
+    }
+    return updatedUsuario;
   }
 
-  actualizarUsuario(id: string, usuario: User) {
-    return usuario;
-  }
-
-  eliminarUsuario(id: string) {
-    return id;
+  async eliminarUsuario(id: string): Promise<User> {
+    const deletedUsuario = await this.userModel.findByIdAndDelete(id).exec();
+    if (!deletedUsuario) {
+      throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
+    }
+    return deletedUsuario;
   }
 }
