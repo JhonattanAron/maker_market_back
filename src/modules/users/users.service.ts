@@ -12,10 +12,12 @@ export class UsersService {
     return createdUsuario.save();
   }
 
-  async obtenerUsuarios(id: string): Promise<User> {
-    const usuario = await this.userModel.findById(id).exec();
+  async obtenerUsuarios(username: string): Promise<User> {
+    const usuario = await this.userModel.findOne({ username }).exec();
     if (!usuario) {
-      throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
+      throw new NotFoundException(
+        `Usuario con username: ${username} no encontrado`,
+      );
     }
     return usuario;
   }
