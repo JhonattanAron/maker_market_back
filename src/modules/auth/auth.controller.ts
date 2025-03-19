@@ -12,6 +12,7 @@ import {
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/schema/UserSchema';
 
 @Controller('auth')
 export class AuthController {
@@ -51,5 +52,13 @@ export class AuthController {
   logout(@Res() res: Response) {
     res.clearCookie('token', { path: '/' });
     return res.status(200).json({ message: 'Logout exitoso' });
+  }
+
+  @Post('google-login')
+  async googleLogin(
+    @Body()
+    body: User,
+  ) {
+    return this.authService.handleGoogleLogin(body);
   }
 }

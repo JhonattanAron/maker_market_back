@@ -19,12 +19,29 @@ export class AuthService {
     // Verificar si el usuario existe
     const user = await this.userService.obtenerUsuarios(email);
 
-    if (!user || user.password !== pass) {
+    if (!user) {
+      throw new UnauthorizedException('Credenciales inválidas');
+    }
+
+    // Verificar si el usuario no tiene contraseña pero tiene googleId
+    if (!user.password && user.googleId) {
+      throw new UnauthorizedException(
+        'Este usuario solo puede acceder con Google',
+      );
+    }
+
+    // Verificar si la contraseña es correcta
+    if (user.password !== pass) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
     // Crear el payload para el token
-    const payload = { username: user.name, sub: user._id };
+    const payload = {
+      name: user.name,
+      sub: user._id,
+      email: user.email,
+      image: user.image,
+    };
     console.log('Payload:', payload);
 
     // Generar el token JWT
@@ -39,5 +56,17 @@ export class AuthService {
     });
 
     return { message: 'Login exitoso' };
+  }
+
+  async handleGoogleLogin(userData: User) {
+    let user = await this.userService.obtenerUsuarios(userData.email);
+
+    if (!user) {
+      console.log('Usuario Null Creandolo');
+      user = await this.userService.crearUsuario(userData);
+    }
+    console.log('Usuario no Nulo solo estamos iniciando session');
+
+    return { id: user.id, email: user.email, hasPassword: !!user.password };
   }
 }

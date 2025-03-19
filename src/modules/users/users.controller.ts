@@ -16,7 +16,10 @@ export class UsersController {
 
   @Post()
   createUser(@Body() createUserDto: User) {
-    return this.usersService.crearUsuario(createUserDto);
+    return {
+      ususario: this.usersService.crearUsuario(createUserDto),
+      status: 200,
+    };
   }
 
   @Put(':id')
