@@ -7,6 +7,7 @@ import { CategoriasModule } from './modules/categorias/categorias.module';
 import { PedidosModule } from './modules/pedidos/pedidos.module';
 import { ProductosModule } from './modules/productos/productos.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -16,6 +17,10 @@ import { AuthModule } from './modules/auth/auth.module';
     PedidosModule,
     ProductosModule,
     AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
