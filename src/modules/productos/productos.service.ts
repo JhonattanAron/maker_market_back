@@ -10,7 +10,10 @@ export class ProductosService {
   ) {}
 
   async crearProducto(producto: Producto): Promise<Producto> {
-    const createdProducto = new this.productoModel(producto);
+    const createdProducto = new this.productoModel({
+      ...producto,
+      images: producto.images || [],
+    });
     return createdProducto.save();
   }
 

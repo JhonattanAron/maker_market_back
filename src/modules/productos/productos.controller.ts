@@ -16,7 +16,10 @@ export class ProductosController {
   constructor(private readonly productosService: ProductosService) {}
 
   @Post()
-  async crearProducto(@Body() producto: Producto): Promise<Producto> {
+  async crearProducto(
+    @Body() producto: Producto,
+    @Body('imagenes') imagenes: string[],
+  ): Promise<Producto> {
     return this.productosService.crearProducto(producto);
   }
 
