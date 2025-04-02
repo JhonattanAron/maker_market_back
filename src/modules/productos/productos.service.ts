@@ -25,6 +25,14 @@ export class ProductosService {
     return producto;
   }
 
+  async obtenerProductosPorCantidad(cantidad: number): Promise<Producto[]> {
+    return this.productoModel.find().limit(cantidad).exec();
+  }
+
+  async obtenerProductos(): Promise<Producto[]> {
+    return this.productoModel.find().exec();
+  }
+
   async actualizarProducto(id: string, producto: Producto): Promise<Producto> {
     const updatedProducto = await this.productoModel
       .findByIdAndUpdate(id, producto, {

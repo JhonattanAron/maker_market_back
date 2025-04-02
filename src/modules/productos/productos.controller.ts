@@ -32,6 +32,18 @@ export class ProductosController {
     return producto;
   }
 
+  @Get()
+  async obtenerProductosAll(): Promise<Producto[]> {
+    return this.productosService.obtenerProductos();
+  }
+
+  @Get('c/:cantidad')
+  async obtenerProductos(
+    @Param('cantidad') cantidad: number,
+  ): Promise<Producto[]> {
+    return this.productosService.obtenerProductosPorCantidad(cantidad);
+  }
+
   @Put(':id')
   async actualizarProducto(
     @Param('id') id: string,
