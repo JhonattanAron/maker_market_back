@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors(
     {
-      origin: ['http://localhost:3000'], // Dominios permitidos
+      origin: ['http://localhost:3000', 'http://localhost:3001'], // Dominios permitidos
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Métodos permitidos
       credentials: true,
     }, // Permitir cookies y credenciales

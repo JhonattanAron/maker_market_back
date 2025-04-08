@@ -33,8 +33,10 @@ export class Producto extends Document {
   @Prop({ type: String, required: true })
   sku: string;
 
-  @Prop({ type: [String], required: false }) // Nueva propiedad para imágenes
+  @Prop({ type: [String], required: false })
   images: string[];
+  @Prop({ type: Number, required: false, default: 0 })
+  sold: number;
 }
 
 export const ProductoSchema = SchemaFactory.createForClass(Producto);

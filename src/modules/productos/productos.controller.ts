@@ -7,9 +7,11 @@ import {
   Param,
   Body,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { ProductosService } from './productos.service';
 import { Producto } from 'src/schema/ProductosSchema';
+import { PaginatedResult } from './pagination.dto';
 
 @Controller('productos')
 export class ProductosController {
@@ -32,16 +34,25 @@ export class ProductosController {
     return producto;
   }
 
-  @Get()
-  async obtenerProductosAll(): Promise<Producto[]> {
-    return this.productosService.obtenerProductos();
-  }
-
   @Get('c/:cantidad')
   async obtenerProductos(
     @Param('cantidad') cantidad: number,
   ): Promise<Producto[]> {
     return this.productosService.obtenerProductosPorCantidad(cantidad);
+  }
+
+  @Get('name/:name')
+  async obtenerProductoPorNombre(
+    @Param('name') nombre: string,
+  ): Promise<Producto> {
+    const producto =
+      await this.productosService.obtenerProductosPorNombre(nombre);
+    if (!producto) {
+      throw new NotFoundException(
+        `Producto con nombre ${nombre} no encontrado`,
+      );
+    }
+    return producto;
   }
 
   @Put(':id')
@@ -66,5 +77,29 @@ export class ProductosController {
       throw new NotFoundException(`Producto con ID ${id} no encontrado`);
     }
     return deletedProducto;
+  }
+
+  @Get()
+  async getPaginatedProducts(
+    @Query('page') page = 1,
+    @Query('pageSize') pageSize = 10,
+    @Query('search') search?: string,
+  ): Promise<PaginatedResult<Producto>> {
+    return this.productosService.getPaginatedProducts(
+      Number(page),
+      Number(pageSize),
+      search,
+    );
+  }
+
+  @Get('most/sold')
+  async obtenerMasVendidos(
+    @Query('page') page = 1,
+    @Query('pageSize') pageSize = 10,
+  ): Promise<PaginatedResult<Producto>> {
+    return this.productosService.ObetenerMasVendidos(
+      Number(page),
+      Number(pageSize),
+    );
   }
 }
