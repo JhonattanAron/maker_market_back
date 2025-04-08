@@ -37,6 +37,8 @@ export class Producto extends Document {
   images: string[];
   @Prop({ type: Number, required: false, default: 0 })
   sold: number;
+  @Prop({ type: Date, required: false, default: Date.now })
+  create_at: Date;
 }
 
 export const ProductoSchema = SchemaFactory.createForClass(Producto);

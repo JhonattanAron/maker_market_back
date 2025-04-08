@@ -102,4 +102,15 @@ export class ProductosController {
       Number(pageSize),
     );
   }
+
+  @Get('last/created')
+  async obtenerUltimosCreado(
+    @Query('page') page = 1,
+    @Query('pageSize') pageSize = 10,
+  ): Promise<PaginatedResult<Producto>> {
+    return this.productosService.ObtenerPorFechaDeCreacion(
+      Number(page),
+      Number(pageSize),
+    );
+  }
 }

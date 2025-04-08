@@ -103,4 +103,18 @@ export class ProductosService {
 
     return { total, page, pageSize, products };
   }
+
+  async ObtenerPorFechaDeCreacion(
+    page: number,
+    pageSize: number,
+  ): Promise<PaginatedResult<Producto>> {
+    const total = await this.productoModel.countDocuments({});
+    const productos = await this.productoModel
+      .find()
+      .sort({ create_at: -1 })
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
+      .select('name price stock category supplier images code create_at');
+    return { total, page, pageSize, products: productos };
+  }
 }
