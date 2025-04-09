@@ -8,6 +8,8 @@ import { PedidosModule } from './modules/pedidos/pedidos.module';
 import { ProductosModule } from './modules/productos/productos.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { DireccionesController } from './modules/direcciones/direcciones.controller';
+import { DireccionesModule } from './modules/direcciones/direcciones.module';
 
 @Module({
   imports: [
@@ -21,8 +23,9 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    DireccionesModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, DireccionesController],
   providers: [AppService],
 })
 export class AppModule {}

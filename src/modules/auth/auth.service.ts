@@ -41,6 +41,7 @@ export class AuthService {
       sub: user._id,
       email: user.email,
       image: user.image,
+      binding_id: (user._id as string).toString(),
     };
     console.log('Payload:', payload);
 
@@ -67,6 +68,24 @@ export class AuthService {
     }
     console.log('Usuario no Nulo solo estamos iniciando session');
 
-    return { id: user.id, email: user.email, hasPassword: !!user.password };
+    // Crear el payload para el token
+    const payload = {
+      name: user.name,
+      email: user.email,
+      image: user.image,
+      binding_id: (user._id as string).toString(),
+    };
+
+    console.log('Payload:', payload);
+
+    // Generar el token JWT
+    const token = this.jwtService.sign(payload);
+    console.log('Generated Google Token:', token);
+
+    return {
+      binding_id: user._id,
+      email: user.email,
+      token,
+    };
   }
 }

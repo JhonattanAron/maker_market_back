@@ -17,7 +17,14 @@ export class PedidosController {
 
   @Post()
   async crearPedido(@Body() pedido: Pedido): Promise<Pedido> {
-    return this.pedidosService.crearPedido(pedido);
+    const result = await this.pedidosService.crearPedido(
+      pedido,
+      pedido.id_user,
+    );
+    if ('success' in result && !result.success) {
+      throw new Error(result.message);
+    }
+    return result as Pedido;
   }
 
   @Get(':id')

@@ -1,14 +1,32 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Pedido } from 'src/schema/PedidosSchema';
 
 @Injectable()
 export class PedidosService {
   constructor(@InjectModel(Pedido.name) private pedidoModel: Model<Pedido>) {}
 
-  async crearPedido(pedido: Pedido): Promise<Pedido> {
-    const createdPedido = new this.pedidoModel(pedido);
+  async crearPedido(
+    pedido: Pedido,
+    id_client: Types.ObjectId,
+  ): Promise<Pedido | { success: boolean; message: string }> {
+    const pedidosRecientes = await this.pedidoModel.countDocuments({
+      id_client,
+      createdAt: { $gte: new Date(Date.now() - 60 * 60 * 1000) }, // Última hora
+    });
+
+    if (pedidosRecientes >= 10) {
+      return {
+        success: false,
+        message: 'No puedes crear más de 10 pedidos en una hora',
+      };
+    }
+
+    const createdPedido = new this.pedidoModel({
+      ...pedido,
+      id_client,
+    });
     return createdPedido.save();
   }
 
