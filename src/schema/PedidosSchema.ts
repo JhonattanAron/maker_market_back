@@ -16,7 +16,7 @@ export class Pedido extends Document {
   @Prop({ type: String, required: true })
   estado: string;
 
-  @Prop({ type: String, required: true })
+  @Prop({ type: Boolean, required: true })
   pagado: boolean;
 
   @Prop({ type: String, required: true })
@@ -49,6 +49,7 @@ export class Pedido extends Document {
     type: [
       {
         fecha: { type: Date, required: true },
+        titulo: { type: String, require: true },
         descripcion: { type: String, required: true },
       },
     ],

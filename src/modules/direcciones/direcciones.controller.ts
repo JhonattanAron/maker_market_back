@@ -40,6 +40,7 @@ export class DireccionesController {
     }
     return result as Direccion;
   }
+
   @Get(':id')
   async obtenerDireccionPorId(@Param('id') id: string): Promise<Direccion> {
     return this.direccionesService.obtenerDireccionPorId(id);
@@ -48,18 +49,27 @@ export class DireccionesController {
   @Put(':id')
   async actualizarDireccion(
     @Param('id') id: string,
-    @Body() direccionActualizada: Partial<Direccion>,
+    @Query('clientId') clientId: string,
+    @Body() direccion: Direccion,
   ): Promise<Direccion> {
-    return this.direccionesService.actualizarDireccion(
-      id,
-      direccionActualizada,
-    );
+    console.log({ direccion: direccion });
+
+    return this.direccionesService.actualizarDireccion(id, clientId, direccion);
+  }
+
+  @Put(':id/principal')
+  async actualizarDireccionPrincipal(
+    @Param('id') id: string,
+    @Query('clienteId') clienteId: string,
+  ): Promise<Direccion> {
+    return this.direccionesService.actualizarDireccionPrincipal(id, clienteId);
   }
 
   @Delete(':id')
   async eliminarDireccion(
     @Param('id') id: string,
+    @Query('clientId') clietId: string,
   ): Promise<{ success: boolean }> {
-    return this.direccionesService.eliminarDireccion(id);
+    return this.direccionesService.eliminarDireccion(id, clietId);
   }
 }
