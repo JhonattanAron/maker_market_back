@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { PedidosService } from './pedidos.service';
 import { Pedido } from 'src/schema/PedidosSchema';
@@ -21,11 +22,24 @@ export class PedidosController {
     return result as Pedido;
   }
 
-  @Get(':id')
-  async obtenerPedido(@Param('id') id: string): Promise<Pedido> {
-    const pedido = await this.pedidosService.obtenerPedido(id);
+  @Get('paginado')
+  async obtenerPedidosPaginados(
+    @Query('userId') userId: string,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
+  ) {
+    return await this.pedidosService.obtenerPedidosPaginados(
+      userId,
+      Number(page),
+      Number(limit),
+    );
+  }
+
+  @Get(':id_pedido')
+  async obtenerPedido(@Param('id_pedido') id_pedido: string): Promise<Pedido> {
+    const pedido = await this.pedidosService.obtenerPedido(id_pedido);
     if (!pedido) {
-      throw new NotFoundException(`Pedido con ID ${id} no encontrado`);
+      throw new NotFoundException(`Pedido con ID ${id_pedido} no encontrado`);
     }
     return pedido;
   }

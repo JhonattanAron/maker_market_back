@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { nanoid } from 'nanoid'; // Importar nanoid para generar códigos únicos
 
 @Schema()

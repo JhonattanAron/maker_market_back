@@ -7,7 +7,7 @@ import {
 
 @Schema()
 export class Pedido extends Document {
-  @Prop({ type: String, required: true, unique: true })
+  @Prop({ type: String, required: true })
   id_pedido: string;
 
   @Prop({ type: Types.ObjectId, ref: 'User', required: true })
@@ -27,6 +27,15 @@ export class Pedido extends Document {
 
   @Prop({ type: Number, required: true })
   total: number;
+
+  @Prop({ type: Number, required: true })
+  subtotal: number;
+
+  @Prop({ type: Number, required: true })
+  envio: number;
+
+  @Prop({ type: Number, required: true })
+  impuesto: number;
 
   @Prop({ type: Date, required: true })
   fecha: Date;
@@ -51,6 +60,7 @@ export class Pedido extends Document {
         fecha: { type: Date, required: true },
         titulo: { type: String, require: true },
         descripcion: { type: String, required: true },
+        svg_icon: { type: String, require: true },
       },
     ],
     required: false,
