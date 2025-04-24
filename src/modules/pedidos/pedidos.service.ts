@@ -102,12 +102,13 @@ export class PedidosService {
             const producto = await this.productoModel
               .findById(p.productoId)
               .exec();
+
             return {
               productoId: p.productoId,
               cantidad: p.cantidad,
               nombre: producto?.name || null,
               precio: producto?.price || null,
-              imagen: producto?.images?.[0] || null,
+              imagen: producto?.options[0].image || null,
             };
           }),
         );

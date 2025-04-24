@@ -27,6 +27,7 @@
     "@nestjs/mongoose": "^11.0.1",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
+    "class-validator": "^0.14.1",
     "dotenv": "^16.4.7",
     "maker_market_back": "file:",
     "mongoose": "^8.9.6",

@@ -102,6 +102,16 @@ export class ProductosController {
       Number(pageSize),
     );
   }
+  @Get('most/rating')
+  async obtenerMejorValorados(
+    @Query('page') page = 1,
+    @Query('pageSize') pageSize = 10,
+  ): Promise<PaginatedResult<Producto>> {
+    return this.productosService.ObtenerMejorValorados(
+      Number(page),
+      Number(pageSize),
+    );
+  }
 
   @Get('last/created')
   async obtenerUltimosCreado(

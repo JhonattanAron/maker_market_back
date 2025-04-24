@@ -10,6 +10,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { DireccionesController } from './modules/direcciones/direcciones.controller';
 import { DireccionesModule } from './modules/direcciones/direcciones.module';
+import { RatingsModule } from './modules/ratings/ratings.module';
+import { RatingsService } from './modules/ratings/ratings.service';
 
 @Module({
   imports: [
@@ -24,8 +26,9 @@ import { DireccionesModule } from './modules/direcciones/direcciones.module';
       envFilePath: '.env',
     }),
     DireccionesModule,
+    RatingsModule,
   ],
   controllers: [AppController, DireccionesController],
-  providers: [AppService],
+  providers: [AppService, RatingsService],
 })
 export class AppModule {}

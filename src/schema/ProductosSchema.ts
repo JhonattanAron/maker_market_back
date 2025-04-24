@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document } from 'mongoose';
 import { nanoid } from 'nanoid'; // Importar nanoid para generar códigos únicos
+import { OptionItem } from 'src/interfaces/ProductosInterfaces';
 
 @Schema()
 export class Producto extends Document {
@@ -33,12 +34,33 @@ export class Producto extends Document {
   @Prop({ type: String, required: true })
   sku: string;
 
-  @Prop({ type: [String], required: false })
-  images: string[];
   @Prop({ type: Number, required: false, default: 0 })
   sold: number;
+
   @Prop({ type: Date, required: false, default: Date.now })
   create_at: Date;
+
+  @Prop({ type: Number, required: false, default: 0 })
+  discountPrice: number;
+
+  @Prop({ type: Number, required: false, default: 0 })
+  porcentaje: number;
+
+  @Prop({ type: Number, required: false, default: 5 })
+  valoracion: number;
+  @Prop({ type: Number, required: false, default: 0 })
+  valoraciones_totales: number;
+  @Prop({
+    type: [
+      {
+        name: { type: String, require: true },
+        image: { type: String, require: true },
+      },
+    ],
+    required: false,
+    default: false,
+  })
+  options: OptionItem[];
 }
 
 export const ProductoSchema = SchemaFactory.createForClass(Producto);

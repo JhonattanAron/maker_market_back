@@ -13,7 +13,7 @@ export class ProductosService {
   async crearProducto(producto: Producto): Promise<Producto> {
     const createdProducto = new this.productoModel({
       ...producto,
-      images: producto.images || [],
+      options: producto.options || [],
     });
     return createdProducto.save();
   }
@@ -75,18 +75,29 @@ export class ProductosService {
     const products = await this.productoModel
       .find(filter)
       .skip((page - 1) * pageSize)
-      .limit(pageSize)
-      .select('name price stock category supplier images code');
+      .limit(pageSize);
 
     return { total, page, pageSize, products };
   }
 
-  async obtenerProductosMejorValorados(cantidad: number): Promise<Producto[]> {
-    return this.productoModel
-      .find()
-      .sort({ rating: -1 }) // Assuming 'rating' is a field in the schema
-      .limit(cantidad)
-      .select('name price stock category supplier images code');
+  async ObtenerMejorValorados(
+    page: number,
+    pageSize: number,
+  ): Promise<PaginatedResult<Producto>> {
+    const total = await this.productoModel.countDocuments({
+      valoraciones_totales: { $gt: 0 },
+    });
+
+    const products = await this.productoModel
+      .find({ valoraciones_totales: { $gt: 0 } })
+      .sort({ valoracion: -1, valoraciones_totales: -1 })
+      .skip((page - 1) * pageSize)
+      .limit(pageSize)
+      .select(
+        'name price stock category supplier options code sold valoracion valoraciones_totales',
+      );
+
+    return { total, page, pageSize, products };
   }
 
   async ObetenerMasVendidos(
@@ -99,7 +110,7 @@ export class ProductosService {
       .sort({ sold: -1 }) // Sort by 'sold' field in descending order
       .skip((page - 1) * pageSize)
       .limit(pageSize)
-      .select('name price stock category supplier images code sold');
+      .select('name price stock category supplier options code sold');
 
     return { total, page, pageSize, products };
   }
@@ -114,7 +125,7 @@ export class ProductosService {
       .sort({ create_at: -1 })
       .skip((page - 1) * pageSize)
       .limit(pageSize)
-      .select('name price stock category supplier images code create_at');
+      .select('name price stock category supplier options code create_at');
     return { total, page, pageSize, products: productos };
   }
 }
