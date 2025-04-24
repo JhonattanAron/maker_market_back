@@ -50,6 +50,12 @@ export class Producto extends Document {
   valoracion: number;
   @Prop({ type: Number, required: false, default: 0 })
   valoraciones_totales: number;
+  @Prop({ type: Boolean, required: true, default: false })
+  internacional: boolean;
+  @Prop({ type: String, required: false })
+  origen: string;
+  @Prop({ type: String, required: false })
+  details: string;
   @Prop({
     type: [
       {
